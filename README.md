@@ -6,10 +6,10 @@
 
 <p align="center">
   <img src="https://img.shields.io/pub/v/tilingslots.svg?style=flat-square&label=pub" alt="pub version">
-  <img src="https://img.shields.io/pub/likes/tilingslots.svg?style=flat-square" alt="pub likes">
   <img src="https://img.shields.io/badge/dart-%3E%3D3.5.0-01579B.svg?style=flat-square" alt="Dart SDK">
   <img src="https://img.shields.io/badge/license-MIT-green.svg?style=flat-square" alt="license MIT">
   <img src="https://github.com/AmidVoshakul/tilingslots/actions/workflows/ci.yml/badge.svg?style=flat-square" alt="CI">
+  <img src="https://github.com/AmidVoshakul/tilingslots/actions/workflows/release.yml/badge.svg" alt="Release">
 </p>
 
 **A terminal workspace that assembles itself from plugins.** Microkernel

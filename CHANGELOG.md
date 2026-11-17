@@ -70,8 +70,6 @@ additive changes until 1.0.
     the focused plugin implementation live. Covered by
     `test/adapter_nocterm/demo_smoke_test.dart` (rendering, keyboard
     interaction, and re-layout at 40x16 and 120x40 terminal sizes).
-  - `example/layout_quickstart.dart`: headless layout demo (rect computation,
-    split, JSON round-trip) on the nocterm-free entrypoint.
   - `doc/PLUGIN_AUTHORING.md`.
 - **Packaging**
   - `tilingslots_core.dart` entrypoint with zero nocterm imports.

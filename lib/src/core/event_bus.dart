@@ -129,7 +129,7 @@ class EventBus {
     return handle;
   }
 
-  /// Subscribes [handler] to all events (alias for subscribe<TailEvent>).
+  /// Subscribes [handler] to all events (alias for `subscribe<TailEvent>`).
   Subscription subscribeAll(Object? Function(TailEvent event) handler,
       {bool prepend = false}) {
     return subscribe<TailEvent>(handler, prepend: prepend, global: true);

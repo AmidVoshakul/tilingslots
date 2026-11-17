@@ -11,7 +11,7 @@ jobs:
       - run: dart test
       - run: dart doc
       - name: Examples
-        run: dart run example/layout_quickstart.dart
+        run: dart analyze example
       - name: Coverage
         run: |
           dart test --coverage=coverage

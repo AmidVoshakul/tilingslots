@@ -1,4 +1,6 @@
 /// Focus management for tiling slots.
+library;
+
 import 'package:nocterm/nocterm.dart';
 
 /// Focus traversal for slots.
