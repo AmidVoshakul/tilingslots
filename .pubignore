@@ -1,0 +1,9 @@
+doc/
+coverage/
+cov_all/
+*.iml
+.DS_Store
+.opencode/
+.codegraph/
+AGENTS.md
+.github/

@@ -1,0 +1,18 @@
+name: ci
+on: [push, pull_request]
+jobs:
+  test:
+    runs-on: ubuntu-latest
+    steps:
+      - uses: actions/checkout@v4
+      - uses: dart-lang/setup-dart@v1
+      - run: dart pub get
+      - run: dart analyze
+      - run: dart test
+      - run: dart doc
+      - name: Examples
+        run: dart run example/layout_quickstart.dart
+      - name: Coverage
+        run: |
+          dart test --coverage=coverage
+          dart run coverage:format_coverage --lcov --in=coverage --out=coverage/lcov.info --packages=.dart_tool/package_config.json --report-on=lib
