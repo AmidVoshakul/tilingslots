@@ -11,6 +11,10 @@ topics:
   - plugin
   - tiling
 
+screenshots:
+  - description: 'Tiling workspace assembled from plugins at runtime'
+    path: assets/demo.gif
+
 environment:
   sdk: ">=3.5.0 <4.0.0"
 

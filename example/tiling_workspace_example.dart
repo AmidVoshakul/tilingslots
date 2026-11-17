@@ -122,7 +122,7 @@ class HeaderPlugin extends SlotPlugin {
         children: [
           Text('${info?.title ?? 'tilingslots'}',
               style: TextStyle(color: Colors.yellow)),
-          const Text('LEGO workspace'),
+          const Text('Tiling workspace demo'),
           const Text(''),
           const Text('S/V   split'),
           const Text('Z     zoom pane'),

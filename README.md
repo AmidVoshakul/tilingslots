@@ -1,6 +1,10 @@
 <h1 align="center">TilingSlots</h1>
 
 <p align="center">
+  <img src="https://raw.githubusercontent.com/AmidVoshakul/tilingslots/HEAD/assets/demo.gif" alt="Demo of tilingslots assembling a tiling workspace from plugins" width="640">
+</p>
+
+<p align="center">
   <img src="https://img.shields.io/pub/v/tilingslots.svg?style=flat-square&label=pub" alt="pub version">
   <img src="https://img.shields.io/pub/likes/tilingslots.svg?style=flat-square" alt="pub likes">
   <img src="https://img.shields.io/badge/dart-%3E%3D3.5.0-01579B.svg?style=flat-square" alt="Dart SDK">
