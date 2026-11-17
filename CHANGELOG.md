@@ -70,14 +70,22 @@ additive changes until 1.0.
     the focused plugin implementation live. Covered by
     `test/adapter_nocterm/demo_smoke_test.dart` (rendering, keyboard
     interaction, and re-layout at 40x16 and 120x40 terminal sizes).
-  - `example/main.dart`: headless tiling demo (rect computation, split, JSON
-    round-trip) on the nocterm-free entrypoint.
-  - `example/layout_quickstart.dart`: minimal headless layout computation.
+  - `example/layout_quickstart.dart`: headless layout demo (rect computation,
+    split, JSON round-trip) on the nocterm-free entrypoint.
   - `doc/PLUGIN_AUTHORING.md`.
 - **Packaging**
   - `tilingslots_core.dart` entrypoint with zero nocterm imports.
-  - 264 passing tests; `dart analyze` and `dart doc` clean; CI enforces the
+  - 290 passing tests; `dart analyze` and `dart doc` clean; CI enforces the
     coverage gate (core+layout >= 80%).
+
+### Added (continued)
+
+- Layout presets: `WorkspacePresets` (`twoColumns`, `threeColumns`,
+  `mainAndSidebar`, `grid2x2`) and `SlotWorkspace.applyPreset`.
+- Plugin manifests: `PluginManifest` + `PluginManifestLoader`.
+- Command palette: `CommandPalette` with filtering and execution.
+- Layout migration: `LayoutSerializer.migrate` for legacy/v1 documents.
+- Crash-isolation tests for active slots after `attach`/`into`.
 
 ### Changed
 
@@ -127,3 +135,7 @@ additive changes until 1.0.
 - `PluginManager.dispose()` is now async and runs `teardown` for still-enabled
   plugins before closing the lifecycle stream; `SlotWorkspace.dispose()`
   delegates to it and additionally exposes `disposeAsync()`.
+- ServiceContainer dependents tracking and overwrite protection.
+- EventBus modes: `serial`/`bail`/`waterfall` + `prepend`.
+- Plugin config schema validation (`PluginConfigSchema`).
+- Major fixes: timeline cursor restore, dispose safety, re-entrancy guard.

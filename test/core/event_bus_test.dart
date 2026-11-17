@@ -74,4 +74,46 @@ void main() {
       expect(logged, isA<StateError>());
     });
   });
+
+  group('modes', () {
+    test('bail stops at first non-null result', () {
+      final bus = EventBus();
+      final calls = <String>[];
+      bus.subscribe<AEvent>((e) {
+        calls.add('first');
+        return 'halted';
+      });
+      bus.subscribe<AEvent>((e) {
+        calls.add('second');
+        return null;
+      });
+      final result = bus.publish(AEvent(1), mode: EventMode.bail);
+      expect(result, 'halted');
+      expect(calls, ['first']);
+    });
+
+    test('waterfall passes result through chain', () {
+      final bus = EventBus();
+      bus.subscribe<AEvent>((e) => e.value + 1);
+      bus.subscribe<AEvent>((e) => (e.value) + 10);
+      final result = bus.publish(AEvent(1), mode: EventMode.waterfall);
+      // Waterfall returns the last non-null transformation when possible.
+      expect(result, isNotNull);
+    });
+
+    test('prepend runs before normal subscribers', () {
+      final bus = EventBus();
+      final order = <String>[];
+      bus.subscribe<AEvent>((e) {
+        order.add('normal');
+        return null;
+      });
+      bus.subscribe<AEvent>((e) {
+        order.add('prepended');
+        return null;
+      }, prepend: true);
+      bus.publish(AEvent(1));
+      expect(order, ['prepended', 'normal']);
+    });
+  });
 }

@@ -23,24 +23,32 @@ class TilingController extends ChangeNotifier {
     _focus = FocusManager(slotOrder: _collectSlots(_layout));
     if (bus != null && removePluginPanes) {
       _pluginSub = bus.subscribe<PluginDisabledEvent>((e) {
-        final slotId = e.slotId ?? e.pluginId;
+        if (_handlingPluginDisabled) return null;
+        _handlingPluginDisabled = true;
         try {
-          _layout = LayoutEngine.remove(_layout, slotId, bus: bus);
-        } catch (e, st) {
-          // The disabled plugin owned the only pane: fall back to an empty slot.
-          final slots = _collectSlots(_layout);
-          if (slots.isNotEmpty && slots.every((s) => s == slotId)) {
-            _layout = const SlotNode(slotId: '_empty');
-          } else {
-            _reportError(e, st);
+          final slotId = e.slotId ?? e.pluginId;
+          try {
+            _layout = LayoutEngine.remove(_layout, slotId, bus: bus);
+          } catch (e, st) {
+            // The disabled plugin owned the only pane: fall back to an empty slot.
+            final slots = _collectSlots(_layout);
+            if (slots.isNotEmpty && slots.every((s) => s == slotId)) {
+              _layout = const SlotNode(slotId: '_empty');
+            } else {
+              _reportError(e, st);
+            }
           }
+          updateLayout(_layout);
+        } finally {
+          _handlingPluginDisabled = false;
         }
-        updateLayout(_layout);
+        return null;
       });
     }
   }
 
   final EventBus? _bus;
+  bool _handlingPluginDisabled = false;
   Subscription? _pluginSub;
   final KeyboardBindings _keyboardBindings;
   int _nextSlotId = 2;

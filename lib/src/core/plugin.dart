@@ -1,4 +1,5 @@
 import 'event_bus.dart';
+import 'plugin_config.dart';
 import 'plugin_scope.dart';
 import 'service_container.dart';
 
@@ -15,6 +16,20 @@ abstract class Plugin {
   /// Optional slot id for plugins that render into a tiling slot.
   /// Defaults to `null` for non-visual plugins.
   String? get slotId => null;
+
+  /// Optional configuration map for this plugin instance.
+  Map<String, dynamic>? get config => null;
+
+  /// Optional schema used to validate [config] before enable.
+  PluginConfigSchema? get configSchema => null;
+
+  /// Validates [config] against [configSchema], if both are provided.
+  void validateConfig() {
+    final schema = configSchema;
+    final cfg = config;
+    if (schema == null || cfg == null) return;
+    schema.validate(cfg);
+  }
 
   /// Called once when the plugin is enabled. Register long-lived resources on
   /// [scope] (subscriptions, timers) so they are disposed automatically.

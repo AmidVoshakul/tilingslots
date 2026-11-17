@@ -165,4 +165,30 @@ void main() {
       expect(disposed, ['newer', 'original']);
     });
   });
+
+  group('dependents', () {
+    test('unregistering a service with dependents throws', () {
+      final c = ServiceContainer();
+      c.registerSingleton<int>(1);
+      c.registerSingleton<String>('two', dependsOn: [int]);
+      expect(() => c.unregister<int>(), throwsStateError);
+    });
+
+    test('overwriting a service with dependents throws', () {
+      final c = ServiceContainer();
+      c.registerSingleton<int>(1);
+      c.registerSingleton<String>('two', dependsOn: [int]);
+      expect(() => c.registerSingleton<int>(3), throwsStateError);
+    });
+
+    test('unregistering dependents first allows unregistering dependency', () {
+      final c = ServiceContainer();
+      c.registerSingleton<int>(1);
+      c.registerSingleton<String>('two', dependsOn: [int]);
+      c.unregister<String>();
+      c.unregister<int>();
+      expect(c.contains<int>(), isFalse);
+      expect(c.contains<String>(), isFalse);
+    });
+  });
 }

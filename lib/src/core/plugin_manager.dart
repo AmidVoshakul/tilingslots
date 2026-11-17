@@ -50,6 +50,7 @@ class PluginManager {
     _ensureNotDisposed();
     final plugin = _plugins[id];
     if (plugin == null) throw StateError('Unknown plugin: $id');
+    plugin.validateConfig();
     if (_enabled.contains(id)) return;
     final snapshot = container.capture();
     final scope = PluginScope();

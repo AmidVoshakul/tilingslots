@@ -27,3 +27,7 @@ dart run example/tiling_workspace_example.dart [workspace.json]
 The demo's rendering, keyboard interaction, palette assembly, and spawn
 behavior are asserted in `test/adapter_nocterm/demo_smoke_test.dart`;
 re-layout at 40x16/120x40 is covered in `render_guards_test.dart`.
+
+## Plugin template
+
+`example/plugin_template.dart` is the smallest possible `SlotPlugin` — copy it as a starting point.

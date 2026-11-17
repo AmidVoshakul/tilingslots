@@ -34,10 +34,11 @@ class SlotWorkspace extends ChangeNotifier {
     // the workspace releases the pane so the dead plugin cannot hold UI.
     _crashSub = _bus.subscribe<PluginCrashedEvent>((event) {
       final slot = _activeSlots.remove(event.pluginId);
-      if (slot == null) return;
+      if (slot == null) return null;
       _removePane(slot);
       _focus.updateSlots(_collectSlots(_layout));
       notifyListeners();
+      return null;
     });
   }
 
@@ -304,6 +305,13 @@ class SlotWorkspace extends ChangeNotifier {
     });
   }
 
+  /// Applies a declarative layout preset, recording it in the timeline.
+  Future<void> applyPreset(LayoutNode preset) async {
+    await _record('preset', 'apply preset', () async {
+      await _adoptLayout(preset);
+    });
+  }
+
   Future<void> _adoptLayout(LayoutNode newLayout) async {
     _layout = newLayout;
     final slots = _collectSlots(_layout).toSet();
@@ -500,8 +508,13 @@ class SlotWorkspace extends ChangeNotifier {
     return _timeline.enqueue(() async {
       final entry = _timeline.stepBack();
       if (entry == null) return;
-      await _applyDocument(entry.before,
-          implementations: entry.implementations);
+      try {
+        await _applyDocument(entry.before,
+            implementations: entry.implementations);
+      } catch (error) {
+        _timeline.stepForward();
+        rethrow;
+      }
     });
   }
 
@@ -510,8 +523,13 @@ class SlotWorkspace extends ChangeNotifier {
     return _timeline.enqueue(() async {
       final entry = _timeline.stepForward();
       if (entry == null) return;
-      await _applyDocument(entry.after,
-          implementations: entry.afterImplementations);
+      try {
+        await _applyDocument(entry.after,
+            implementations: entry.afterImplementations);
+      } catch (error) {
+        _timeline.stepBack();
+        rethrow;
+      }
     });
   }
 
@@ -550,15 +568,22 @@ class SlotWorkspace extends ChangeNotifier {
   /// Prefer [disposeAsync] when the caller can await.
   @override
   void dispose() {
-    // Chain service disposal behind async plugin teardown, swallow unexpected
-    // teardown failures so they cannot become unhandled async errors, and let
-    // listeners go on the sync path too.
+    // Cancel crash handling first, then dispose plugins and services even if
+    // teardown fails.
+    _crashSub.cancel();
     _plugins
         .dispose()
-        .then((_) => _services.dispose())
-        .catchError((Object _) {});
-    _crashSub.cancel();
-    super.dispose();
+        .catchError((Object error, StackTrace stackTrace) {
+          _bus.publish(PluginErrorEvent(
+            pluginId: 'workspace',
+            error: error,
+            stackTrace: stackTrace,
+          ));
+        })
+        .whenComplete(() {
+          _services.dispose();
+          super.dispose();
+        });
   }
 
   /// Awaited variant of [dispose]: runs plugin `teardown` for enabled plugins,

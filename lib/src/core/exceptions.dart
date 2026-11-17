@@ -11,3 +11,8 @@ class TilingslotsException implements Exception {
 class UnknownSlotPluginError extends TilingslotsException {
   const UnknownSlotPluginError(super.message);
 }
+
+/// Thrown when a plugin configuration fails schema validation.
+class PluginConfigValidationError extends TilingslotsException {
+  const PluginConfigValidationError(super.message);
+}

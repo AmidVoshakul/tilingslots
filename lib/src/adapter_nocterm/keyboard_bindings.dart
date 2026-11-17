@@ -16,13 +16,13 @@ enum TilingAction {
 /// Configurable keymap.
 class Keymap {
   Keymap([Map<LogicalKey, TilingAction>? bindings])
-      : bindings = bindings == null
-            ? Map.unmodifiable(defaultBindings)
-            : bindings;
+      : bindings =
+            bindings == null ? Map.unmodifiable(defaultBindings) : bindings;
 
   final Map<LogicalKey, TilingAction> bindings;
 
-  static final Map<LogicalKey, TilingAction> defaultBindings = Map.unmodifiable({
+  static final Map<LogicalKey, TilingAction> defaultBindings =
+      Map.unmodifiable({
     LogicalKey.tab: TilingAction.nextFocus,
     LogicalKey.arrowLeft: TilingAction.prevFocus,
     LogicalKey.arrowRight: TilingAction.nextFocus,

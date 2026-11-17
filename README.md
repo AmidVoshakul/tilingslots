@@ -169,6 +169,7 @@ reuse outside terminal applications. Only tied to nocterm
 
 - [Plugin authoring guide](doc/PLUGIN_AUTHORING.md) - contract, scoped
   effects, replace semantics, testing
+- [Writing an adapter](doc/WRITING_AN_ADAPTER.md) - custom UI backend contract
 - [Changelog](CHANGELOG.md) - what appeared and when
 - [Comparison with cordis](doc/COMPARISON-cordis.md) - pattern mapping
   vs TypeScript meta framework

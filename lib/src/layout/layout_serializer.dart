@@ -28,6 +28,34 @@ class LayoutSerializer {
     return {'version': 1, 'root': toJson(root)};
   }
 
+  /// Migrates a legacy or versioned layout document to the current (v1)
+  /// schema. Node-level documents are wrapped into a versioned document.
+  static Map<String, dynamic> migrate(Map<String, dynamic> json) {
+    if (json.containsKey('root')) {
+      final version = json['version'];
+      if (version == null) {
+        return <String, dynamic>{'version': 1, 'root': json['root']};
+      }
+      if (version == 1) {
+        return Map<String, dynamic>.from(json);
+      }
+      throw LayoutSerializationException(
+          'Unsupported layout version: $version');
+    }
+    if (json.containsKey('type')) {
+      final version = json['version'];
+      if (version != null && version != 1) {
+        throw LayoutSerializationException(
+            'Unsupported layout version: $version');
+      }
+      return <String, dynamic>{
+        'version': 1,
+        'root': Map<String, dynamic>.from(json)
+      };
+    }
+    throw LayoutSerializationException('Invalid layout document');
+  }
+
   static LayoutNode fromJson(Map<String, dynamic> json,
       {Set<String>? knownSlots,
       int maxDepth = LayoutEngine.maxDepth,
